@@ -1,0 +1,75 @@
+site_name: ComplAInce
+site_url: https://github.com/alexym1/ComplAInce
+repo_url: https://github.com/alexym1/ComplAInce/tree/1.0.0
+repo_name: alexym1/ComplAInce
+docs_dir: ../../docs
+nav:
+- Contents:
+  - Home: index.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+- Modules: references/
+theme:
+  name: material
+  language: en
+  palette:
+    scheme: preference
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.indexes
+    - navigation.instant
+    - navigation.tabs.sticky
+markdown_extensions:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.tabbed
+  - attr_list
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      linenums: false
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.details
+  - admonition
+  - toc:
+      baselevel: 2
+      permalink: true
+      slugify: !!python/name:pymdownx.slugs.uslugify
+  - meta
+plugins:
+  - include-markdown
+  - autorefs
+  - gen-files:
+      scripts:
+      - docs/gen.py
+  - search:
+      lang: en
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            new_path_syntax: yes
+            docstring_style: "numpy"
+          setup_commands:
+            - import sys
+            - sys.path.append(complaince)
+            - sys.path.append("docs")
+          rendering:
+            heading_level: 2
+      watch:
+        - complaince
+extra:
+  social:
+    - icon: material/email
+      link: alexym1
