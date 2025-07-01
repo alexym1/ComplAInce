@@ -6,9 +6,13 @@ import mkdocs_gen_files
 
 nav = mkdocs_gen_files.Nav()
 
-pkg = "python/complaince/prod"
+pkg = "complaince"
 
 for path in sorted(Path(pkg).glob("**/*.py")):
+
+    if path.name == "__init__.py":
+        continue
+
     module_path = path.relative_to(pkg).with_suffix("")
     doc_path = path.relative_to(pkg).with_suffix(".md")
     full_doc_path = Path("references", doc_path)
@@ -19,7 +23,7 @@ for path in sorted(Path(pkg).glob("**/*.py")):
 
     with mkdocs_gen_files.open(full_doc_path, "w") as fd:
         ident = (
-            pkg.replace("python/", "").replace("/", ".")
+            pkg
             + "."
             + (".".join(module_path.parts))
         )
