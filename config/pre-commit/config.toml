@@ -1,0 +1,39 @@
+[tool]
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+target-version = ['py36', 'py37', 'py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.*
+  | __pycache__
+  | build
+  | dist
+  | docs
+  | config
+  | notebooks
+  | data
+  | setup.cfg
+  | .*\.toml$
+  | .*\.yml$
+  | Makefile
+  | .*\.md$
+  | tests
+  | .*\.pyi$
+)/
+'''
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 120
+skip_gitignore = true
+# you can skip files as below
+#skip_glob = docs/conf.py
+known_currentpkg=['complaince']
+known_submodulespkgs=['ai_platform', 'ai_tools', 'mti_face_analysis', 'skin_tone_analysis']
+sections=['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'SUBMODULESPKGS', 'CURRENTPKG', 'LOCALFOLDER']
