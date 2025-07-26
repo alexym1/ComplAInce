@@ -247,7 +247,7 @@ class CartographyAPI(ast.NodeVisitor):
             ax.set_ylim(0, 1)
             ax.axis("off")
 
-            plt.title("API Tree Structure")
+            plt.title("Tree Structure of the API")
             plt.savefig(output_png)
 
 
