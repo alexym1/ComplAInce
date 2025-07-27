@@ -6,7 +6,7 @@
 
 ComplAInce is a suite of tools and an AI agent designed to simplify understanding a code repository. It includes features to map out the folder structure, source code, and Git history.
 
-Imagine this: you inherit an IT project burdened with massive technical debt — no coding best practices, files with no structure or logic. The whole thing is 99.99999% vibe-coded. That’s where ComplAInce comes in! Why bother manually navigating through the project tree when an AI agent can do it for you? 
+Imagine this: you inherit an IT project burdened with massive technical debt — no coding best practices, files with no structure or logic. The whole thing is 99.99999% vibe-coded. That’s where ComplAInce comes in! Why bother manually navigating through the project tree when an AI agent can do it for you?
 
 👉 Reduce cognitive complexity
 👉 Simplified code remediation
@@ -64,14 +64,14 @@ python complaince/tools/cartography_history.py -n 20
 Run the AI agent.
 
 ```shell
-uvicorn complaince.exposition:complaince_api --host 0.0.0.0
+uvicorn complaince.exposition.complaince_api:app --host 0.0.0.0 --port 8000
 ```
 
 OR
 
 ```python
 import uvicorn
-uvicorn.run("complaince.exposition:complaince_api:app", host="0.0.0.0", port=8000)
+uvicorn.run("complaince.exposition.complaince_api:app", host="0.0.0.0", port=8000)
 ```
 
 OR
