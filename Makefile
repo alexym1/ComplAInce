@@ -189,3 +189,15 @@ test-docstrings:
 		(${ECHO} "${_CYAN}Doctest example '$$i'... NOK${_END}"; exit 1;); \
 	done
 	@${ECHO} "${_BLUE}Doctest examples... OK${_END}"
+
+### Build docker images
+docker-build:
+	(cd docker; ./docker.sh --build)
+
+### Run docker images
+docker-run:
+	(cd docker; ./docker.sh --run)
+
+### Publish docker images
+docker-publish:
+	(cd docker; ./docker.sh --publish)
