@@ -1,8 +1,9 @@
 """Expose ComplAInce AI agent as an API."""
 
+from fastapi import FastAPI
+
 from complaince.core.agent import run_agent
 from complaince.schemas.exposition_models import Root
-from fastapi import FastAPI
 
 app = FastAPI(
     title="ComplAInce API",
@@ -20,6 +21,7 @@ def get_info() -> Root:
         description="This API allows you to accelerate code remediation using AI agent",
         usage="Send a POST request to /run_agent?prompt=your_prompt",
     )
+
 
 @app.post("/run_agent")
 def run_agent_api(prompt: str):
@@ -41,4 +43,4 @@ def run_agent_api(prompt: str):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("complaince.core.exposition:app", host="0.0.0.0", port=8000)
+    uvicorn.run("complaince.exposition.complaince_api:app", host="0.0.0.0", port=8000)
