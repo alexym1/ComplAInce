@@ -1,12 +1,13 @@
 """Core of the AI agent."""
 
 
-from complaince.core.fetch_github import map_github_repository
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
+
+from complaince.core.fetch_github import map_github_repository
 
 load_dotenv()
 
@@ -57,7 +58,6 @@ def create_agent():
     return react_graph
 
 
-@tracing_messages
 def run_agent(prompt: str) -> dict[str, list[str]]:
     """
     Run AI agent.
