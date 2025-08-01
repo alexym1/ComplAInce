@@ -2,6 +2,7 @@
 
 
 from dotenv import load_dotenv
+from langchain.schema import BaseMessage
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import START, MessagesState, StateGraph
@@ -18,7 +19,7 @@ llm = ChatOpenAI(model="gpt-4o")
 llm_with_tools = llm.bind_tools(tools, parallel_tool_calls=False)
 
 
-def create_assistant(state: MessagesState) -> dict[str, list[str]]:
+def create_assistant(state: MessagesState) -> dict[str, list[BaseMessage]]:
     """
     Assistant to generate AI agents.
 
@@ -34,7 +35,9 @@ def create_assistant(state: MessagesState) -> dict[str, list[str]]:
     sys_msg = SystemMessage(
         content="You're a useful assistant tasked with mapping a github repository from a set of inputs."
     )
-    return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
+
+    messages = {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
+    return messages
 
 
 def create_agent():
@@ -60,7 +63,7 @@ def create_agent():
 
 
 @tracing_messages
-def run_agent(prompt: str) -> dict[str, list[str]]:
+def run_agent(prompt: str) -> list[HumanMessage]:
     """
     Run AI agent.
 
