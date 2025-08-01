@@ -8,6 +8,7 @@ from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
 from complaince.core.fetch_github import map_github_repository
+from complaince.core.monitoring import tracing_messages
 
 load_dotenv()
 
@@ -58,6 +59,7 @@ def create_agent():
     return react_graph
 
 
+@tracing_messages
 def run_agent(prompt: str) -> dict[str, list[str]]:
     """
     Run AI agent.
