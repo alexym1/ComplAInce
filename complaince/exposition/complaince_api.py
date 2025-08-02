@@ -16,7 +16,7 @@ app = FastAPI(
 def get_info() -> Root:
     """How to run the ComplAInce agent."""
     return Root(
-        version="ComplAInce API 0.1.0",
+        version="ComplAInce API 1.0.0",
         message="Welcome to the ComplAInce API",
         description="This API allows you to accelerate code remediation using AI agent",
         usage="Send a POST request to /run_agent?prompt=your_prompt",
@@ -24,7 +24,7 @@ def get_info() -> Root:
 
 
 @app.post("/run_agent")
-def run_agent_api(prompt: str):
+def run_agent_api(prompt: str, tread_id: str | None = None):
     """
     Run the ComplAInce AI agent.
 
@@ -33,11 +33,14 @@ def run_agent_api(prompt: str):
     prompt
         natural language text describing the task that an AI should perform
 
+    tread_id
+        ID of the discussion thread
+
     Returns
     -------
     Lists of messages embedded in a dictionnary
     """
-    return run_agent(prompt)
+    return run_agent(prompt, tread_id=tread_id)
 
 
 if __name__ == "__main__":

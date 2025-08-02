@@ -65,7 +65,7 @@ def create_agent():
 
 
 @tracing_messages
-def run_agent(prompt: str) -> list[HumanMessage]:
+def run_agent(prompt: str, thread_id: str | None = None) -> list[HumanMessage]:
     """
     Run AI agent.
 
@@ -74,13 +74,19 @@ def run_agent(prompt: str) -> list[HumanMessage]:
     prompt
         natural language
 
+    thread_id
+        ID of the discussion thread
+
     Returns
     -------
     Lists of messages embedded in a dictionnary
     """
     react_graph = create_agent()
 
+    if thread_id is None:
+        thread_id = str(uuid.uuid4())
+
     messages = [HumanMessage(content=prompt)]
-    messages = react_graph.invoke({"messages": messages}, config={"configurable": {"thread_id": str(uuid.uuid4())}})
+    messages = react_graph.invoke({"messages": messages}, config={"configurable": {"thread_id": thread_id}})
 
     return messages
