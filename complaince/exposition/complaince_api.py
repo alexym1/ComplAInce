@@ -24,7 +24,7 @@ def get_info() -> Root:
 
 
 @app.post("/run_agent")
-def run_agent_api(prompt: str, tread_id: str | None = None):
+def run_agent_api(prompt: str, thread_id: str = ""):
     """
     Run the ComplAInce AI agent.
 
@@ -40,7 +40,7 @@ def run_agent_api(prompt: str, tread_id: str | None = None):
     -------
     Lists of messages embedded in a dictionnary
     """
-    return run_agent(prompt, tread_id=tread_id)
+    return run_agent(prompt, thread_id=thread_id)
 
 
 if __name__ == "__main__":

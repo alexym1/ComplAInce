@@ -65,7 +65,7 @@ def create_agent():
 
 
 @tracing_messages
-def run_agent(prompt: str, thread_id: str | None = None) -> list[HumanMessage]:
+def run_agent(prompt: str, thread_id: str = "") -> list[HumanMessage]:
     """
     Run AI agent.
 
@@ -83,7 +83,7 @@ def run_agent(prompt: str, thread_id: str | None = None) -> list[HumanMessage]:
     """
     react_graph = create_agent()
 
-    if thread_id is None:
+    if thread_id == "":
         thread_id = str(uuid.uuid4())
 
     messages = [HumanMessage(content=prompt)]
