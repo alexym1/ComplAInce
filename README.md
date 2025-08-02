@@ -1,12 +1,16 @@
 # ComplAInce
 
-> A better way to speed up code remediation
+> An AI agent to speed up code remediation
 
 ## Overview
 
-Code remediation was frequently necessary to scale algorithms from proof of concept (POC) to production. However, a considerable amount of time was often required to understand the repository’s purpose, architecture, and key components before any substantive modifications could be made. Consequently, less time was available for implementing new features or addressing bugs, ultimately slowing the overall development process.
+ComplAInce is a suite of tools and an AI agent designed to simplify understanding a code repository. It includes features to map out the folder structure, source code, and Git history.
 
-To address this challenge, ComplAInce was developed to streamline the extraction of key components from a codebase. It accelerates the remediation process by significantly reducing the time needed for manual exploration and comprehension of the repository.
+Imagine this: you inherit an IT project burdened with massive technical debt — no coding best practices, files with no structure or logic. The whole thing is 99.99999% vibe-coded. That’s where ComplAInce comes in! Why bother manually navigating through the project tree when an AI agent can do it for you?
+
+👉 Reduce cognitive complexity
+👉 Simplified code remediation
+👉 Easy way to spot bugs
 
 
 ## Installation
@@ -32,7 +36,8 @@ pip install -U complaince
 ### Set up ENV variable
 
 ```bash
-GITHUB_TOKEN=YOUR_GITHUB_TOKEN
+GITHUB_TOKEN=<YOUR_GITHUB_TOKEN>
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY>
 ```
 
 ### ComplAInce as SDK
@@ -53,6 +58,31 @@ python complaince/tools/cartography_repository.py --remove site docs dist
 python complaince/tools/cartography_api.py data/fake_repo/fastapi_web_app.py
 python complaince/tools/cartography_history.py -n 20
 ```
+
+### ComplAInce as API
+
+Run the AI agent.
+
+```shell
+uvicorn complaince.exposition.complaince_api:app --host 0.0.0.0 --port 8000
+```
+
+OR
+
+```python
+import uvicorn
+uvicorn.run("complaince.exposition.complaince_api:app", host="0.0.0.0", port=8000)
+```
+
+OR
+
+```shell
+make docker-build
+make docker-run
+```
+
+Then, open http://127.0.0.1:8000/docs#/default/ and run the API.
+
 
 ## Code of conduct
 

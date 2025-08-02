@@ -53,8 +53,12 @@ git push origin branch_name
 
 4. Update CHANGELOG.md with new entry
 
-5. Generate the docs using `make docs`
+5. Generate the docs using `make docs`. Test in local using `make docs-serve`
 
 6. Create a PR from to master
 
-7. Review the PR and merge it.
+7. Review the PR
+
+8. Deploy the docs online using `make docs-deploy`
+
+9. Merge the PR
