@@ -1,10 +1,12 @@
 """Core of the AI agent."""
 
+import uuid
 
 from dotenv import load_dotenv
 from langchain.schema import BaseMessage
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
@@ -54,17 +56,10 @@ def create_agent():
 
     # Define edges
     builder.add_edge(START, "Assistant")
-    builder.add_conditional_edges(
-        "Assistant",
-        # If the latest message (result) from assistant is a tool call -> tools_condition routes to tools
-        # If the latest message (result) from assistant is a not a tool call -> tools_condition routes to END
-        tools_condition,
-    )
+    builder.add_conditional_edges("Assistant", tools_condition)
+    builder.add_edge("tools", "Assistant")
 
-    across_thread_memory = InMemoryStore()
-    within_thread_memory = MemorySaver()
-
-    react_graph = builder.compile(checkpointer=within_thread_memory, store=across_thread_memory)
+    react_graph = builder.compile(checkpointer=MemorySaver())
 
     return react_graph
 
@@ -84,7 +79,8 @@ def run_agent(prompt: str) -> list[HumanMessage]:
     Lists of messages embedded in a dictionnary
     """
     react_graph = create_agent()
+
     messages = [HumanMessage(content=prompt)]
-    messages = react_graph.invoke({"messages": messages})
+    messages = react_graph.invoke({"messages": messages}, config={"configurable": {"thread_id": str(uuid.uuid4())}})
 
     return messages

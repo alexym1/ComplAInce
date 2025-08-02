@@ -1,6 +1,7 @@
 """Tools related to the AI agent."""
 
 import ast
+import logging
 import os
 from datetime import datetime
 from tempfile import TemporaryDirectory
@@ -13,10 +14,14 @@ from complaince.tools.cartography_api import CartographyAPI
 from complaince.tools.cartography_history import GitHistory
 from complaince.tools.cartography_repository import CartographyRepo
 
+logger = logging.getLogger(__name__)
+
 temp_dir = TemporaryDirectory()
 
+# Create a timestamped output directory
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 output_dir = f"res_complaince_{timestamp}"
+os.makedirs(output_dir, exist_ok=True)
 
 
 @tool
@@ -49,6 +54,8 @@ def clone_github_repository(repo_name: str, temp_dir: str = temp_dir.name) -> st
 
     repo = github.get_repo(repo_name)
     repo_clone = Repo.clone_from(repo.clone_url, repo_dir)
+
+    logger.info('Repository cloned successfully at %s', repo_clone.working_tree_dir)
 
     return repo_clone.working_tree_dir
 
