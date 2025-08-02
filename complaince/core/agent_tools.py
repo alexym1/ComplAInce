@@ -20,7 +20,8 @@ temp_dir = TemporaryDirectory()
 
 # Create a timestamped output directory
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-output_dir = f"res_complaince_{timestamp}"
+output_dir = f"logs/res_complaince_{timestamp}"
+os.environ["OUTPUT_DIR"] = output_dir
 os.makedirs(output_dir, exist_ok=True)
 
 
