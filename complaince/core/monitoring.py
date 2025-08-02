@@ -3,7 +3,9 @@
 
 import functools
 import os
+import sys
 from datetime import datetime
+from io import StringIO
 
 
 def tracing_messages(func):
@@ -14,8 +16,6 @@ def tracing_messages(func):
         result = func(*args, **kwargs)
 
         os.makedirs("logs", exist_ok=True)
-        for file in os.listdir("logs"):
-            os.remove(os.path.join("logs", file))
 
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = f"logs/tracing_message_{timestamp}.txt"
@@ -24,9 +24,6 @@ def tracing_messages(func):
             for m in result['messages']:
                 content = m.pretty_print()
                 if content is None:
-                    import sys
-                    from io import StringIO
-
                     old_stdout = sys.stdout
                     sys.stdout = mystdout = StringIO()
                     m.pretty_print()

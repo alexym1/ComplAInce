@@ -1,18 +1,26 @@
-"""Generate instructions for Github API"""
+"""Tools related to the AI agent."""
 
 import ast
 import os
+from datetime import datetime
 from tempfile import TemporaryDirectory
 
 from git import Repo
 from github import Auth, Github
+from langchain_core.tools import tool
 
 from complaince.tools.cartography_api import CartographyAPI
 from complaince.tools.cartography_history import GitHistory
 from complaince.tools.cartography_repository import CartographyRepo
 
+temp_dir = TemporaryDirectory()
 
-def clone_github_repository(repo_name: str, temp_dir: str) -> str:
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+output_dir = f"res_complaince_{timestamp}"
+
+
+@tool
+def clone_github_repository(repo_name: str, temp_dir: str = temp_dir.name) -> str:
     """
     Clone a Github repository.
 
@@ -45,27 +53,37 @@ def clone_github_repository(repo_name: str, temp_dir: str) -> str:
     return repo_clone.working_tree_dir
 
 
-def map_github_repository(repo_name: str) -> None:
+@tool
+def map_repo_structure_tool(repo_path: str, output_dir: str = output_dir) -> None:
     """
-    Build and plot the tree structure of a repository.
+    Map the folder structure of a repository.
 
     Parameters
     ----------
-    repo_name
-        Full name of the repository in the format "owner/repo"
+    repo_path
+        Path to the repository
 
-    output_png
-        The output png file to save the plot
+    output_dir
+        Directory to save the output
     """
-    temp_dir = TemporaryDirectory()
-    repo_path = clone_github_repository(repo_name, temp_dir.name)
-
-    # Cartography the Repository
     map_repo = CartographyRepo()
     map_repo.build_tree_from_directory(repo_path)
-    map_repo.plot(output_png="treemap.png")
+    map_repo.plot(output_png=os.path.join(output_dir, "treemap.png"))
 
-    # Cartography the API
+
+@tool
+def map_api_structure_tool(repo_path: str, output_dir: str = output_dir) -> list[str]:
+    """
+    Map the folder structure of a repository.
+
+    Parameters
+    ----------
+    repo_path
+        Path to the repository
+
+    output_dir
+        Directory to save the output
+    """
     map_api = CartographyAPI()
     contents = map_api.search_code_from_directory(repo_path)
 
@@ -75,9 +93,22 @@ def map_github_repository(repo_name: str) -> None:
                 file_content = ast.parse(f.read())
 
             map_api.visit(file_content)
-            map_api.plot_api(output_png=str(item) + "api.png")
+            map_api.plot_api(output_png=os.path.join(output_dir, str(item) + "api.png"))
 
-    # Cartography the git history
+
+@tool
+def map_git_history_tool(repo_path: str, output_dir: str = output_dir) -> None:
+    """
+    Map and visualize the git history of a local repository.
+
+    Parameters
+    ----------
+    repo_path
+        Path to the local repository
+
+    output_dir
+        Directory to save the output
+    """
     repo = GitHistory()
     git_history = repo.git_history_from_local(path=repo_path, n_commits=20)
-    repo.plot_history(git_history, "git_history.png")
+    repo.plot_history(git_history, os.path.join(output_dir, "git_history.png"))

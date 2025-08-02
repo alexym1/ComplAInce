@@ -8,13 +8,18 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from complaince.core.fetch_github import map_github_repository
+from complaince.core.agent_tools import (
+    clone_github_repository,
+    map_api_structure_tool,
+    map_git_history_tool,
+    map_repo_structure_tool,
+)
 from complaince.core.monitoring import tracing_messages
 
 load_dotenv()
 
 
-tools = [map_github_repository]
+tools = [clone_github_repository, map_repo_structure_tool, map_api_structure_tool, map_git_history_tool]
 llm = ChatOpenAI(model="gpt-4o")
 llm_with_tools = llm.bind_tools(tools, parallel_tool_calls=False)
 
@@ -33,11 +38,10 @@ def create_assistant(state: MessagesState) -> dict[str, list[BaseMessage]]:
     Lists of messages embedded in a dictionnary
     """
     sys_msg = SystemMessage(
-        content="You're a useful assistant tasked with mapping a github repository from a set of inputs."
+        content="""You are a helpful assistant tasked with mapping a GitHub repository using available tools. 
+        Use previous tool outputs to guide next steps."""
     )
-
-    messages = {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
-    return messages
+    return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
 
 
 def create_agent():
