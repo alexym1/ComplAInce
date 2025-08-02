@@ -38,7 +38,7 @@ def create_assistant(state: MessagesState) -> dict[str, list[BaseMessage]]:
     Lists of messages embedded in a dictionnary
     """
     sys_msg = SystemMessage(
-        content="""You are a helpful assistant tasked with mapping a GitHub repository using available tools. 
+        content="""You are a helpful assistant tasked with mapping a GitHub repository using available tools.
         Use previous tool outputs to guide next steps."""
     )
     return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
@@ -61,7 +61,10 @@ def create_agent():
         tools_condition,
     )
 
-    react_graph = builder.compile()
+    across_thread_memory = InMemoryStore()
+    within_thread_memory = MemorySaver()
+
+    react_graph = builder.compile(checkpointer=within_thread_memory, store=across_thread_memory)
 
     return react_graph
 
