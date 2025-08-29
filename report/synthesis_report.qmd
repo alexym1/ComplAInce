@@ -1,0 +1,128 @@
+---
+title: "Cartography of the repository"
+subtitle: "by ComplAInce AI agent"
+date: today
+date-format: "MMM D, YYYY"
+format:
+    html:
+      self-contained: true
+      grid:
+        margin-width: 350px
+execute:
+  echo: false
+reference-location: margin
+citation-location: margin
+---
+
+# Introduction
+
+This document demonstrates the use of a number of advanced page layout features to produce an attractive and usable document inspired by the Tufte handout style and the use of Tufte's styles in RMarkdown documents [@xie2018]. The Tufte handout style is a style that Edward Tufte uses in his books and handouts. Tufte's style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. Quarto[^1] supports most of the layout techniques that are used in the Tufte handout style for both HTML and LaTeX/PDF output.
+
+[^1]: To learn more, you can read more about [Quarto](https://www.quarto.org) or visit [Quarto's Github repository](https://www.github.com/quarto-dev/quarto-cli).
+
+``` yaml
+---
+title: "An Example Using the Tufte Style"
+author: "John Smith"
+format:
+  html:
+    grid:
+      margin-width: 350px         # <1>
+  pdf: default
+reference-location: margin        # <2>
+citation-location: margin         # <2>
+---
+```
+
+1.  Increases the width of the margin to make more room for sidenotes and margin figures (HTML only).
+2.  Places footnotes and cited sources in the margin. Other layout options (for example placing a figure in the margin) will be set per element in examples below.
+
+These layout features are designed with two important goals in mind:
+
+1.  To produce both PDF and HTML output with similar styles from the same Quarto document;
+2.  To provide simple syntax to write elements of the Tufte style such as side notes and margin figures. If you'd like a figure placed in the margin, just set the option `fig-column: margin` for your code chunk, and we will take care of the details for you[^2].
+
+[^2]: You never need to think about `\begin{marginfigure}` or `<span class="marginfigure">`; the LaTeX and HTML code under the hood may be complicated, but you never need to learn or write such code.
+
+If you have any feature requests or find bugs in these capabilities, please do not hesitate to file them to <https://github.com/quarto-dev/quarto-cli/issues>.
+
+# Figures
+
+## Margin Figures
+
+Images and graphics play an integral role in Tufte's work. To place figures in the margin you can use the **Quarto** chunk option `column: margin`. For example:
+
+Note the use of the `fig-cap` chunk option to provide a figure caption. You can adjust the proportions of figures using the `fig-width` and `fig-height` chunk options. These are specified in inches, and will be automatically scaled down to fit within the handout margin.
+
+## Arbitrary Margin Content
+
+You can include anything in the margin by places the class `.column-margin` on the element. See an example on the right about the first fundamental theorem of calculus.
+
+::: column-margin
+We know from *the first fundamental theorem of calculus* that for $x$ in $[a, b]$:
+
+$$\frac{d}{dx}\left( \int_{a}^{x} f(u)\,du\right)=f(x).$$
+:::
+
+## Full Width Figures
+
+You can arrange for figures to span across the entire page by using the chunk option `fig-column: page-right`.
+
+Other chunk options related to figures can still be used, such as `fig-width`, `fig-cap`, and so on. For full width figures, usually `fig-width` is large and `fig-height` is small. In the above example, the plot size is $11 \times 3$.
+
+## Arbitrary Full Width Content
+
+Any content can span to the full width of the page, simply place the element in a `div` and add the class `column-page-right`. For example, the following code will display its contents as full width.
+
+``` md
+::: {.fullwidth}
+Any _full width_ content here.
+:::
+```
+
+Below is an example:
+
+::: column-page-right
+*R is free software and comes with ABSOLUTELY NO WARRANTY.* You are welcome to redistribute it under the terms of the GNU General Public License versions 2 or 3. For more information about these matters see <https://www.gnu.org/licenses/>.
+:::
+
+## Main Column Figures
+
+Besides margin and full width figures, you can of course also include figures constrained to the main column. This is the default type of figures in the LaTeX/HTML output.
+
+## Margin Captions
+
+When you include a figure constrained to the main column, you can choose to place the figure's caption in the margin by using the `cap-location` chunk option. For example:
+
+
+# Tracing calls
+
+
+```{python}
+#| fig-cap: "Full visibility into the sequence of calls"
+
+import os
+import subprocess
+from IPython.display import Image, display
+from complaince.core.agent import create_agent
+from langchain_core.runnables.graph import MermaidDrawMethod
+
+agent_graph = create_agent()
+
+display(
+    Image(
+        agent_graph.get_graph().draw_mermaid_png(
+            draw_method=MermaidDrawMethod.API,
+        )
+    )
+)
+```
+
+```{python}
+root = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'], stdout=subprocess.PIPE).communicate()[0].rstrip().decode('utf-8')
+
+file = os.listdir(os.path.join(root, "complaince/report"))[0]
+
+with open(os.path.join(root, "complaince/report", file)) as file:
+    print(file.read())
+```
