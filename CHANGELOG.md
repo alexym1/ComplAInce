@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.0.0 - (2025-07-01)
+## 2.0.0 - (2025-07-01)
 
-Here we would have the update steps for 1.0.0 for people to follow.
+Here we would have the update steps for 2.0.0 for people to follow.
 
 ### Added
 

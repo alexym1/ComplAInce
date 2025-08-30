@@ -1,6 +1,6 @@
 [project]
 name = "ComplAInce"
-version = "1.0.0"
+version = "2.0.0"
 homepage = "https://github.com/alexym1/ComplAInce"
 description = "Provide a faster way to comply with AI Act"
 authors = [{ name = "Astral Software Inc.", email = "hey@astral.sh" }]
