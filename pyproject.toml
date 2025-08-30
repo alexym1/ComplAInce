@@ -1,10 +1,13 @@
-[tool]
-[tool.poetry]
+[project]
 name = "ComplAInce"
 version = "1.0.0"
 homepage = "https://github.com/alexym1/ComplAInce"
 description = "Provide a faster way to comply with AI Act"
-authors = ["Alex MARTINEZ"]
+authors = [{ name = "Astral Software Inc.", email = "hey@astral.sh" }]
+requires-python = ">=3.10,<4.0"
+keywords = [
+  "uv", "requirements", "packaging"
+]
 readme = "README.md"
 classifiers=[
     'Intended Audience :: Developers',
@@ -19,36 +22,15 @@ packages = [
     { include = "tests", format = "sdist" },
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<4.0"
-gitpython = "^3.1.44"
-matplotlib = "^3.10.1"
-pandas = "^2.2.3"
-pygithub = "^2.6.1"
-python-dotenv = "^1.0.1"
+dependencies = [
+    "gitpython==3.1.44",
+    "matplotlib==3.10.1",
+    "pandas==2.2.3",
+    "pygithub==2.6.1",
+    "python-dotenv==1.0.1"
+]
 
-mkdocs  = { version = "^1.1.2", optional = true}
-jinja2 = { version = "^2.10.2", optional = true }
-MarkupSafe = { version = "2.0.1", optional = true }
-mkdocs-include-markdown-plugin  = { version = "^1.0.0", optional = true}
-mkdocs-material  = { version = "^6.1.7", optional = true}
-mkdocstrings  = { version = "^0.17.0", optional = true}
-mkdocs-material-extensions  = { version = "^1.0.1", optional = true}
-mkdocs-autorefs = {version = "^0.2.1", optional = true}
-pytkdocs = {extras = ["numpy-style"], version = "^0.15.0", optional = true}
-mkdocs-gen-files = {version = "^0.3.3", python = "^3.7", optional = true}
-mkdocs-literate-nav = {version = "^0.4.1", optional = true}
-bump2version = {version = "^1.0.1", optional = true}
-
-pytest  = { version = "^6.2.4", optional = true}
-pytest-cov  = { version = "^2.12.0", optional = true}
-
-types-pyyaml = [{optional = true, version = "*"}]
-typing_extensions = [{optional = true, version = "*"}]
-mypy = [{optional = true, version = ">=0.991"}]
-pandas-stubs = [{optional = true, version = "*"}]
-
-[tool.poetry.extras]
+[project.optional-dependencies]
 typing = [
     "types-requests",
     "mypy",

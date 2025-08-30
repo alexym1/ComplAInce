@@ -62,7 +62,7 @@ endif
 PIPX_PATH_BIN="${HOME}/.local/bin"
 PIPX_PATH_HOME="${HOME}/.local/pipx"
 PRE_COMMIT="${PIPX_PATH_BIN}/pre-commit"
-POETRY="${PIPX_PATH_BIN}/poetry"
+UV="${PIPX_PATH_BIN}/uv"
 
 
 # Dev & Prod targets
@@ -120,21 +120,21 @@ check-py3:
 
 ## Install environment in prod
 install-prod:
-	@${ECHO} "${_BLUE}Install-prod: init & install poetry & poetry install packages + extra ...${_END}" &&\
-	make _install_prod_poetry_step1 &&\
-	${ECHO} "${_CYAN}Install-prod: install poetry ...${_END}" &&\
-	make _install_prod_poetry_step2 &&\
-	${ECHO} "${_BLUE}Install-prod: init & install poetry & poetry install packages + extra ... OK${_END}"
+	@${ECHO} "${_BLUE}Install-prod: init & install uv & uv install packages + extra ...${_END}" &&\
+	make _install_prod_uv_step1 &&\
+	${ECHO} "${_CYAN}Install-prod: install uv ...${_END}" &&\
+	make _install_prod_uv_step2 &&\
+	${ECHO} "${_BLUE}Install-prod: init & install uv & uv install packages + extra ... OK${_END}"
 
-_install_prod_poetry_step1:
+_install_prod_uv_step1:
 	@${ECHO} "${_CYAN}Install-prod: init ...${_END}"
 	@make init
 
-_install_prod_poetry_step2:
-	@_="$(shell PIPX_HOME="${PIPX_PATH_HOME}" PIPX_BIN_DIR="${PIPX_PATH_BIN}" python3 -m pipx install poetry)" &&\
-	${ECHO} "${_CYAN}Install-prod: poetry install packages + extra ...${_END}" &&\
-	${POETRY} install -E doc -E test -E dev -E typing && \
-	${ECHO} "${_CYAN}Install-prod: install poetry ... OK${_END}"
+_install_prod_uv_step2:
+	@_="$(shell PIPX_HOME="${PIPX_PATH_HOME}" PIPX_BIN_DIR="${PIPX_PATH_BIN}" python3 -m pipx install uv)" &&\
+	${ECHO} "${_CYAN}Install-prod: uv install packages + extra ...${_END}" &&\
+	${UV} sync --all-extras && \
+	${ECHO} "${_CYAN}Install-prod: install uv ... OK${_END}"
 
 ## typing
 mypy:
@@ -142,23 +142,23 @@ mypy:
 
 ## docs
 docs:
-	${POETRY} run mkdocs build --config-file config/packaging/mkdocs.yml --site-dir "${PWD}/site"
+	${UV} run mkdocs build --config-file config/packaging/mkdocs.yml --site-dir "${PWD}/site"
 
 ### Serve documentation (prod)
 docs-serve:
-	${POETRY} run python -m http.server 3000 --directory site
+	${UV} run python -m http.server 3000 --directory site
 
 ### Deploy the documentation to gh-pages
 docs-deploy:
-	${POETRY} run mkdocs gh-deploy --config-file config/packaging/mkdocs.yml
+	${UV} run mkdocs gh-deploy --config-file config/packaging/mkdocs.yml
 	@${ECHO} "${_BLUE}https://alexym1.github.io/ComplAInce${_END}"
 
 ## Testing
 unittest:
-	${POETRY} run pytest ${RUN_ARGS} -c "config/tests/setup.cfg" tests/unitary
+	${UV} run pytest ${RUN_ARGS} -c "config/tests/setup.cfg" tests/unitary
 
 _coverage:
-	${POETRY} run pytest -c "config/tests/setup.cfg" --cov-config="config/tests/setup.cfg" --cov="complaince" --cov-branch --cov-report ${RUN_ARGS} tests/unitary
+	${UV} run pytest -c "config/tests/setup.cfg" --cov-config="config/tests/setup.cfg" --cov="complaince" --cov-branch --cov-report ${RUN_ARGS} tests/unitary
 
 coverage:
 	make _coverage term-missing
@@ -169,15 +169,11 @@ tox:
 
 ## packaging
 build:
-	${POETRY} build ${RUN_ARGS}
+	${UV} build ${RUN_ARGS}
 
 ### Change package version (prod)
 bump2version:
-	${POETRY} run bump2version "${RUN_ARGS}" --commit-args="--no-verify" --config-file="config/packaging/setup.cfg"
-
-### Run poetry - mypy
-poetry-mypy:
-	@${POETRY} run mypy --show-error-codes --config "./config/pre-commit/setup.cfg" ${RUN_ARGS}
+	${UV} run bump2version "${RUN_ARGS}" --commit-args="--no-verify" --config-file="config/packaging/setup.cfg"
 
 ### Test doctring examples of python functions
 test-docstrings:
